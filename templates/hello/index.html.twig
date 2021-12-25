@@ -2,10 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>{{controller_name}}</title>
+    <title>{{controller}}</title>
 </head>
 <body>
-    <h1>{{controller_name}}</h1>
-    <p>サンプルのテンプレート</p>
+    <h1>{{controller}}</h1>
+    <p>{{prev_action}}から{{action}}</p>
+    <p>{{message}}</p>
+    <p><a href="/other/{{action}}/{{message}}">next page.</a></p>
 </body>
 </html>

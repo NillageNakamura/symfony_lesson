@@ -9,21 +9,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HelloController extends AbstractController
 {
-    #[Route('/hello', name: 'hello')]
-    public function index()
+    #[Route('/hello/{msg}', name: 'hello')]
+    public function index($msg='hello!')
     {
         return $this->render('hello/index.html.twig', [
-            'controller_name' => 'HelloController',
+            'controller' => 'HelloController',
+            'action' => 'index',
+            'prev_action' => '(none)',
+            'message' => $msg,
         ]);
     }
 
-    #[Route('/other/{domain}', name: 'other')]
-    public function other(Request $request, $domain='')
+    #[Route('/other/{action}/{msg}', name: 'other')]
+    public function other($action,$msg)
     {
-        if ($domain == ''){
-            return $this->redirect('/hello');
-        }else{
-            return new RedirectResponse("http://{$domain}.com");
-        }
+        return $this->render('hello/index.html.twig', [
+            'controller' => 'HelloController',
+            'action' => 'other',
+            'prev_action' => $action,
+            'message' => $msg,
+        ]);
     }
 }
