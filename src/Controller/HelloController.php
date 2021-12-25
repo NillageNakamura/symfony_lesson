@@ -11,9 +11,15 @@ class HelloController extends AbstractController
     #[Route('/hello', name: 'hello')]
     public function index(Request $request)
     {
+        if ($request->getMethod() == 'POST'){
+            $input = $request->request->get('input');
+            $msg = 'こんにちわ' . $input . 'さん';
+        } else {
+            $msg = 'お名前は？';
+        }
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
-            'message' => 'あなたのお名前:',
+            'message' => $msg,
         ]);
     }
 
