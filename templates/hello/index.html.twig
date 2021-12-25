@@ -2,12 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>{{controller}}</title>
+    <title>{{title}}</title>
 </head>
 <body>
-    <h1>{{controller}}</h1>
-    <p>{{prev_action}}から{{action}}</p>
+    <h1>{{title}}</h1>
     <p>{{message}}</p>
-    <p><a href="/other/{{action}}/{{message}}">next page.</a></p>
+    <form action='/other' method='post'>
+        <inpput type='text' name='input'></input>
+        <inpput type='submit' value='Click'></input>
+    </form>
 </body>
 </html>
