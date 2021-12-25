@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HelloController extends AbstractController
 {
     #[Route('/hello/{name}/{pass}', name: 'hello')]
-    public function index($name, $pass)
+    public function index($name='(no name)', $pass='(no password)')
     {
         $result = '<html><body>';
         $result .= '<h1>Parameter</h1>';
