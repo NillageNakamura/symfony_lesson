@@ -5,10 +5,3 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
-
-# 名前:
-#     path: パスの指定
-#     controller: コントローラ::アクション
-# hello:
-#     path: /hello
-#     controller: App\Controller\HelloController::index
