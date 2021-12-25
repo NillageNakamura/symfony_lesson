@@ -4,23 +4,17 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HelloController extends AbstractController
 {
     #[Route('/hello', name: 'hello')]
-    public function index(Request $request)
+    public function index()
     {
-        $name = $request->get('name');
-        $pass = $request->get('pass');
-
-        $result = '<html><body>';
-        $result .= '<h1>Parameter</h1>';
-        $result .= '<p>This is index page.</p>';
-        $result .= '</body></html>';
-        return new Response($result);
+        return $this->render('hello/index.html.twig', [
+            'controller_name' => 'HelloController',
+        ]);
     }
 
     #[Route('/other/{domain}', name: 'other')]
