@@ -25,7 +25,7 @@ class HelloController extends AbstractController
     }
 
     #[Route('/find/{id}', name: 'find')]
-    public function find(Request $request, Person $person): Response
+    public function find(Person $person, $id=1): Response
     {
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
