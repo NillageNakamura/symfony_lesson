@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Form\PersonType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class HelloController extends AbstractController
 {
@@ -38,16 +37,11 @@ class HelloController extends AbstractController
     public function create(Request $request, ManagerRegistry $doctrine): Response
     {
         $person = new Person();
-        $form = $this->createFormBuilder($person)
-            ->add('name', TextType::class)
-            ->add('mail', TextType::class)
-            ->add('age', IntegerType::class)
-            ->add('save', SubmitType::class, ['label' => 'Click'])
-            ->getForm();
+        $form = $this->createForm(PersonType::class, $person);
+        // リクエスト情報をフォームにハンドリング
+        $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST'){
-            // リクエスト情報をフォームにハンドリング
-            $form->handleRequest($request);
             // createFormBuilderに引数を指定しておくとgetDataでインスタンスを取り出せる
             $person = $form->getData();
             // マネージャを取得し、persistを使ってインスタンスを保存
@@ -68,15 +62,10 @@ class HelloController extends AbstractController
     #[Route('/update/{id}', name: 'update')]
     public function update(Request $request, ManagerRegistry $doctrine, Person $person, $id=1)
     {
-        $form = $this->createFormBuilder($person)
-            ->add('name', TextType::class)
-            ->add('mail', TextType::class)
-            ->add('age', IntegerType::class)
-            ->add('save', SubmitType::class, ['label' => 'Click'])
-            ->getForm();
+        $form = $this->createForm(PersonType::class, $person);
+        $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
             $person = $form->getData();
             $manager = $doctrine->getManager();
             $manager->persist($person);
@@ -99,7 +88,6 @@ class HelloController extends AbstractController
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
             $person = $form->getData();
             $manager = $doctrine->getManager();
             $manager->remove($person);
