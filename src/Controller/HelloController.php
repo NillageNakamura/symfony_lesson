@@ -39,7 +39,7 @@ class HelloController extends AbstractController
             $findstr = $form->getData()->getFind();
             // リポジトリの所得
             $repository = $doctrine->getRepository(Person::class);
-            $result = $repository->findByAge($findstr);
+            $result = $repository->findByNameOrMail($findstr);
         }else{
             $result = null;
         }
