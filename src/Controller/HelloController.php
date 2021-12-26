@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class HelloController extends AbstractController
 {
@@ -51,22 +52,28 @@ class HelloController extends AbstractController
     }
 
     #[Route('/create', name: 'create')]
-    public function create(Request $request, ManagerRegistry $doctrine): Response
+    public function create(Request $request, ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
-        // リクエスト情報をフォームにハンドリング
         $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST'){
-            // createFormBuilderに引数を指定しておくとgetDataでインスタンスを取り出せる
             $person = $form->getData();
-            // マネージャを取得し、persistを使ってインスタンスを保存
-            $manager = $doctrine->getManager();
-            $manager->persist($person);
-            // flushで反映
-            $manager->flush();
-            return $this->redirect('/hello');
+            $errors = $validator->validate($person);
+
+            if (count($errors) == 0) {
+                $manager = $doctrine->getManager();
+                $manager->persist($person);
+                $manager->flush();
+                return $this->redirect('/hello');
+            } else {
+                return $this->render('hello/hello.html.twig', [
+                    'title' => 'Hello',
+                    'message' => 'ERROR!',
+                    'form' => $form->createView(),
+                ]);
+            }
         } else {
             return $this->render('hello/create.html.twig', [
                 'title' => 'Hello',
