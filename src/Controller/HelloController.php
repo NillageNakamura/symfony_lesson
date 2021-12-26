@@ -31,7 +31,7 @@ class HelloController extends AbstractController
         $formobj = new FindForm();
         $form = $this->createFormBuilder($formobj)
             ->add('find', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Delete'])
+            ->add('save', SubmitType::class, ['label' => 'Click'])
             ->getForm();
 
         if($request->getMethod() == 'POST') {
@@ -39,7 +39,7 @@ class HelloController extends AbstractController
             $findstr = $form->getData()->getFind();
             // リポジトリの所得
             $repository = $doctrine->getRepository(Person::class);
-            $result = $repository->findBy(['name' => $findstr]);
+            $result = $repository->findByName($findstr);
         }else{
             $result = null;
         }
