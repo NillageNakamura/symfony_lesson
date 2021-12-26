@@ -90,4 +90,28 @@ class HelloController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(Request $request, ManagerRegistry $doctrine, Person $person, $id=1)
+    {
+        $form = $this->createFormBuilder($person)
+            ->add('save', SubmitType::class, ['label' => 'Delete'])
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+            $person = $form->getData();
+            $manager = $doctrine->getManager();
+            $manager->remove($person);
+            $manager->flush();
+            return $this->redirect('/hello');
+        } else {
+            return $this->render('hello/delete.html.twig', [
+                'title' => 'Hello',
+                'message' => 'Delete Entity id=' . $person->getId(),
+                'form' => $form->createView(),
+                'data' => $person,
+            ]);
+        }
+    }
 }
