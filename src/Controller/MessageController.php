@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Form\MessageType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class MessageController extends AbstractController
     public function create(Request $request, ManagerRegistry $doctrine, ValidatorInterface $validator): Response
     {
         $message = new Message();
-        $form = $this->createForm(messageType::class, $message);
+        $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST'){
