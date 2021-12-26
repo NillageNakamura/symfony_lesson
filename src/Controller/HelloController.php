@@ -33,15 +33,14 @@ class HelloController extends AbstractController
             ->add('find', TextType::class)
             ->add('save', SubmitType::class, ['label' => 'Click'])
             ->getForm();
+        $repository = $doctrine->getRepository(Person::class);
 
         if($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
-            // リポジトリの所得
-            $repository = $doctrine->getRepository(Person::class);
             $result = $repository->findByNameOrMail($findstr);
         }else{
-            $result = null;
+            $result = $repository->findAllWithSort();
         }
 
         return $this->render('hello/find.html.twig', [
