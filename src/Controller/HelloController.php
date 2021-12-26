@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -24,12 +25,29 @@ class HelloController extends AbstractController
         ]);
     }
 
-    #[Route('/find/{id}', name: 'find')]
-    public function find(Person $person, $id=1): Response
+    #[Route('/find', name: 'find')]
+    public function find(Request $request, ManagerRegistry $doctrine): Response
     {
+        $formobj = new FindForm();
+        $form = $this->createFormBuilder($formobj)
+            ->add('find', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Delete'])
+            ->getForm();
+
+        if($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+            $findstr = $form->getData()->getFind();
+            // リポジトリの所得
+            $repository = $doctrine->getRepository(Person::class);
+            $result = $repository->findBy(['name' => $findstr]);
+        }else{
+            $result = null;
+        }
+
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
-            'data' => $person,
+            'data' => $result,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -101,5 +119,20 @@ class HelloController extends AbstractController
                 'data' => $person,
             ]);
         }
+    }
+}
+
+class FindForm
+{
+    private $find;
+
+    public function getFind()
+    {
+        return $this->find;
+    }
+
+    public function setFind($find)
+    {
+        $this->find = $find;
     }
 }
