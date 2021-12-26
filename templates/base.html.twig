@@ -8,7 +8,18 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-
+        <style>
+        th {
+            background:#009;
+            color:white;
+            padding:5px 15px;
+            font-size:14px;
+        }
+        tr {
+            background:#eee;
+            padding:5px 15px;
+        }
+        </style>
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
