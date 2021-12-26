@@ -1,14 +1,24 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>{{title}}</title>
-</head>
-<body>
-    <h1>{{title}}</h1>
-    <p>data: {{data}}</p>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-</body>
-</html>
+{% extends 'base.html.twig' %}
+
+{% block page %}{{title}}{% endblock %}
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+<h2>Person table</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Mail</th>
+        <th>Age</th>
+    </tr>
+    {% for item in data %}
+    <tr>
+        <th>{{item.id}}</th>
+        <th>{{item.name}}</th>
+        <th>{{item.mail}}</th>
+        <th>{{item.age}}</th>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
