@@ -60,9 +60,11 @@ class PersonRepository extends ServiceEntityRepository
 
     public function findByAge($value)
     {
-        return $this->createQueryBuilder('p')
-            ->where('p.age >= ?1')
-            ->setParameter(1, $value)
+        $arr = explode(',', str_replace([" ", "　"], "", $value));
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->gte('p.age', $arr[0]))
+            ->andWhere($builder->expr()->lte('p.age', $arr[1]))
             ->getQuery()
             ->getResult();
     }
